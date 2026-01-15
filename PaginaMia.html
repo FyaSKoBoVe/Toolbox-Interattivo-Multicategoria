@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>La Mia Toolbox</title>
+  <style>
+    /* === NUOVA PALETTE VIOLA === */
+    .light-theme {
+      --bg-gradient: linear-gradient(135deg, #f5f3ff, #ede9fe);
+      --surface: white;
+      --text: #1e1b4b;
+      --text-secondary: #7c3aed;
+      --border: #ddd6fe;
+      --primary: #8b5cf6;
+      --secondary: #7e22ce;
+      --warning: #c084fc;
+      --danger: #ef4444;
+      --icon-color: #1e1b4b; /* Icone scure nel tema chiaro */
+      --shadow: 0 2px 6px rgba(139, 92, 246, 0.15);
+    }
+
+    .dark-theme {
+      --bg-gradient: linear-gradient(135deg, #121220, #1a1a2e);
+      --surface: #1e1b4b;
+      --text: #f0f0ff;
+      --text-secondary: #c7d2fe;
+      --border: #4c1d95;
+      --primary: #a78bfa;
+      --secondary: #8b5cf6;
+      --warning: #c084fc;
+      --danger: #f87171;
+      --icon-color: #ffffff; /* Icone bianche nel tema scuro */
+      --shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text);
+      padding: 0;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      z-index: 10;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .search-box {
+      position: relative;
+      width: 220px;
+    }
+
+    #global-search {
+      width: 100%;
+      padding: 0.5rem 0.5rem 0.5rem 2rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.93rem;
+      outline: none;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    #search-icon {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    #theme-toggle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #theme-toggle:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    #add-btn {
+      background: var(--primary);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      color: white;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+    }
+
+    #add-btn:hover {
+      background: var(--secondary);
+    }
+
+    .backup-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .backup-btn:hover {
+      background: #2d2a4a;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      padding: 1.6rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      color: var(--text);
+    }
+
+    .modal h2 {
+      margin-bottom: 1.1rem;
+      color: var(--primary);
+      font-size: 1.3rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.92rem;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+    }
+
+    #category-suggestions,
+    #edit-category-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--primary);
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      z-index: 10;
+      max-height: 160px;
+      overflow-y: auto;
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    .category-option {
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      border-bottom: 1px solid #334155;
+      color: var(--text);
+    }
+
+    .category-option:hover {
+      background: #2d2a4a;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 0.7rem;
+      justify-content: flex-end;
+      margin-top: 0.4rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.92rem;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-secondary { background: #334155; color: var(--text); }
+    .btn-warning { background: var(--warning); color: #0f172a; }
+    .btn-danger { background: var(--danger); color: white; }
+
+    .btn:hover { opacity: 0.9; }
+
+    #links-container {
+      flex: 1;
+      padding: 1rem 1.2rem;
+      overflow-y: auto;
+      column-count: 1;
+    }
+
+    @media (min-width: 480px) {
+      #links-container { column-count: 2; }
+    }
+    @media (min-width: 768px) {
+      #links-container { column-count: 4; column-gap: 0.9rem; padding: 1.1rem 1.4rem; }
+    }
+    @media (min-width: 1400px) {
+      #links-container { column-count: 6; column-gap: 1rem; }
+    }
+    @media (min-width: 1920px) {
+      #links-container { column-count: 8; column-gap: 1.1rem; }
+    }
+    @media (min-width: 2560px) {
+      #links-container { column-count: 10; column-gap: 1.2rem; }
+    }
+
+    .category {
+      break-inside: avoid-column;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.7rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .rename-input {
+      background: var(--surface);
+      border: 1px solid var(--primary);
+      color: var(--text);
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      width: 120px;
+    }
+
+    .link-item {
+      background: var(--surface);
+      padding: 0.55rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 0.7rem;
+      position: relative;
+      min-height: 54px;
+      break-inside: avoid;
+      font-size: 0.9rem;
+    }
+
+    .link-actions {
+      position: absolute;
+      top: 0.45rem;
+      right: 0.45rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .link-actions button {
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      font-size: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      border: none;
+      color: var(--icon-color); /* ← ICONA PIÙ VISIBILE */
+      background: rgba(255,255,255,0.15); /* Sfondo semi-trasparente per contrasto */
+    }
+
+    .link-item h3 {
+      margin-bottom: 0.2rem;
+      font-size: 0.9rem;
+      padding-right: 26px;
+      line-height: 1.25;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .link-item a {
+      color: var(--primary);
+      text-decoration: none;
+      flex: 1;
+    }
+
+    .link-item a:hover {
+      text-decoration: underline;
+    }
+
+    .link-item p.desc {
+      margin-top: 0.2rem;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.3;
+    }
+
+    #import-file {
+      display: none;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 0.65rem 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+    }
+
+    #toast.show {
+      opacity: 1;
+    }
+
+    .no-results {
+      text-align: center;
+      color: var(--text-secondary);
+      font-style: italic;
+      padding: 1.8rem;
+      grid-column: 1 / -1;
+    }
+  </style>
+</head>
+<body class="dark-theme">
+  <header>
+    <h1>🛠️ La Mia Toolbox</h1>
+    <div class="search-box">
+      <span id="search-icon">🔍</span>
+      <input type="text" id="global-search" placeholder="Cerca link..." />
+    </div>
+    <div class="header-actions">
+      <button id="theme-toggle" title="Cambia tema">🌙</button>
+      <button class="backup-btn" id="copy-btn">📋 Copia</button>
+      <button class="backup-btn" id="export-btn">📥 Esporta</button>
+      <button class="backup-btn" id="import-btn">📤 Importa</button>
+      <button id="add-btn">+</button>
+    </div>
+  </header>
+
+  <div id="toast">Operazione completata!</div>
+  <input type="file" id="import-file" accept=".json" />
+
+  <!-- Modale Aggiungi -->
+  <div class="modal" id="add-modal">
+    <div class="modal-content">
+      <h2>Aggiungi un nuovo link</h2>
+      <div class="form-group">
+        <label for="add-title">Titolo *</label>
+        <input type="text" id="add-title" placeholder="Es. GitHub" />
+      </div>
+      <div class="form-group">
+        <label for="add-url">URL *</label>
+        <input type="url" id="add-url" placeholder="https://esempio.com" />
+      </div>
+      <div class="form-group" id="category-group">
+        <label for="add-category">Categoria *</label>
+        <input type="text" id="add-category" placeholder="Nuova o seleziona..." autocomplete="off" />
+        <div id="category-suggestions"></div>
+      </div>
+      <div class="form-group">
+        <label for="add-desc">Descrizione (opzionale)</label>
+        <textarea id="add-desc" rows="2" placeholder="Breve descrizione..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" id="add-cancel">Annulla</button>
+        <button class="btn btn-primary" id="add-save">Salva</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Modifica -->
+  <div class="modal" id="edit-modal">
+    <div class="modal-content">
+      <h2>Modifica link</h2>
+      <input type="hidden" id="edit-index" />
+      <div class="form-group">
+        <label for="edit-title">Titolo *</label>
+        <input type="text" id="edit-title" placeholder="Es. GitHub" />
+      </div>
+      <div class="form-group">
+        <label for="edit-url">URL *</label>
+        <input type="url" id="edit-url" placeholder="https://esempio.com" />
+      </div>
+      <div class="form-group" id="edit-category-group">
+        <label for="edit-category">Categoria *</label>
+        <input type="text" id="edit-category" placeholder="Nuova o seleziona..." autocomplete="off" />
+        <div id="edit-category-suggestions"></div>
+      </div>
+      <div class="form-group">
+        <label for="edit-desc">Descrizione (opzionale)</label>
+        <textarea id="edit-desc" rows="2" placeholder="Breve descrizione..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" id="edit-cancel">Annulla</button>
+        <button class="btn btn-warning" id="edit-save">Aggiorna</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="links-container"></div>
+
+<script>
+  // === Gestione Tema ===
+  const body = document.body;
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('theme');
+  const useDark = savedTheme !== 'light';
+  body.className = useDark ? 'dark-theme' : 'light-theme';
+  themeToggle.textContent = useDark ? '🌙' : '☀️';
+  themeToggle.title = useDark ? 'Passa a tema chiaro' : 'Passa a tema scuro';
+
+  themeToggle.addEventListener('click', () => {
+    const isNowLight = body.classList.contains('dark-theme');
+    body.className = isNowLight ? 'light-theme' : 'dark-theme';
+    const newMode = isNowLight ? 'light' : 'dark';
+    localStorage.setItem('theme', newMode);
+    themeToggle.textContent = isNowLight ? '☀️' : '🌙';
+    themeToggle.title = isNowLight ? 'Passa a tema scuro' : 'Passa a tema chiaro';
+  });
+
+  // === Dati ===
+  let links = JSON.parse(localStorage.getItem('toolboxLinks')) || [];
+  let pinnedCategory = localStorage.getItem('pinnedCategory') || null;
+  let pinnedLinks = JSON.parse(localStorage.getItem('pinnedLinks')) || {};
+
+  // === Helper ===
+  function formatDate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  function getLinkId(link) {
+    return btoa(link.url + '|' + link.title).replace(/=/g, '');
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function getUniqueCategories() {
+    return [...new Set(links.map(l => l.category.trim()).filter(c => c))]
+      .sort((a, b) => a.localeCompare(b, 'it', { sensitivity: 'base' }));
+  }
+
+  // === Rinomina Categoria ===
+  function renameCategory(oldName, newName) {
+    if (!newName.trim()) {
+      showToast('Il nome non può essere vuoto.');
+      return false;
+    }
+    const finalNewName = newName.trim();
+    links = links.map(link => 
+      link.category === oldName ? { ...link, category: finalNewName } : link
+    );
+    
+    if (pinnedCategory === oldName) {
+      pinnedCategory = finalNewName;
+      localStorage.setItem('pinnedCategory', finalNewName);
+    }
+    
+    if (pinnedLinks[oldName]) {
+      pinnedLinks[finalNewName] = pinnedLinks[oldName];
+      delete pinnedLinks[oldName];
+      localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+    }
+    
+    saveAndRender();
+    showToast(`Categoria rinominata in "${finalNewName}"!`);
+    return true;
+  }
+
+  // === Pin Categorie ===
+  function togglePinCategory(category) {
+    if (pinnedCategory === category) {
+      pinnedCategory = null;
+      localStorage.removeItem('pinnedCategory');
+      showToast(`Categoria "${category}" non più fissata.`);
+    } else {
+      pinnedCategory = category;
+      localStorage.setItem('pinnedCategory', category);
+      showToast(`Categoria "${category}" fissata in cima!`);
+    }
+    renderLinks();
+  }
+
+  // === Pin Link per Categoria ===
+  function togglePinLink(category, linkId) {
+    if (pinnedLinks[category] === linkId) {
+      delete pinnedLinks[category];
+      localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+      showToast('Link non più fissato in questa categoria.');
+    } else {
+      pinnedLinks[category] = linkId;
+      localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+      showToast('Link fissato in cima a questa categoria!');
+    }
+    renderLinks();
+  }
+
+  // === Dropdown Categorie ===
+  function setupCategoryDropdown(inputId, suggestionsId) {
+    const input = document.getElementById(inputId);
+    const suggestions = document.getElementById(suggestionsId);
+
+    input.addEventListener('focus', () => {
+      updateSuggestions(input, suggestions);
+      suggestions.style.display = 'block';
+    });
+
+    input.addEventListener('input', () => {
+      updateSuggestions(input, suggestions);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+        suggestions.style.display = 'none';
+      }
+    });
+  }
+
+  function updateSuggestions(input, suggestionsEl) {
+    const value = input.value.trim();
+    const categories = getUniqueCategories();
+    suggestionsEl.innerHTML = '';
+
+    const uniqueCats = categories.filter(cat => 
+      cat.toLowerCase().includes(value.toLowerCase()) && cat !== value
+    );
+
+    if (uniqueCats.length === 0 && (!value || categories.includes(value))) {
+      suggestionsEl.style.display = 'none';
+      return;
+    }
+
+    uniqueCats.forEach(cat => {
+      const option = document.createElement('div');
+      option.className = 'category-option';
+      option.textContent = cat;
+      option.addEventListener('click', () => {
+        input.value = cat;
+        suggestionsEl.style.display = 'none';
+        input.focus();
+      });
+      suggestionsEl.appendChild(option);
+    });
+
+    if (suggestionsEl.children.length > 0) {
+      suggestionsEl.style.display = 'block';
+    }
+  }
+
+  // === Ricerca ===
+  function filterLinks() {
+    const term = document.getElementById('global-search').value.trim().toLowerCase();
+    renderLinks(term);
+  }
+
+  // === Setup iniziale ===
+  const addModal = document.getElementById('add-modal');
+  const editModal = document.getElementById('edit-modal');
+  const addBtn = document.getElementById('add-btn');
+  const exportBtn = document.getElementById('export-btn');
+  const importBtn = document.getElementById('import-btn');
+  const copyBtn = document.getElementById('copy-btn');
+  const importFile = document.getElementById('import-file');
+  const searchInput = document.getElementById('global-search');
+
+  setupCategoryDropdown('add-category', 'category-suggestions');
+  setupCategoryDropdown('edit-category', 'edit-category-suggestions');
+  searchInput.addEventListener('input', filterLinks);
+
+  // === Eventi ===
+  addBtn.addEventListener('click', () => {
+    updateSuggestions(document.getElementById('add-category'), document.getElementById('category-suggestions'));
+    addModal.classList.add('active');
+  });
+
+  document.getElementById('add-cancel').addEventListener('click', () => addModal.classList.remove('active'));
+  addModal.addEventListener('click', (e) => { if (e.target === addModal) addModal.classList.remove('active'); });
+
+  document.getElementById('add-save').addEventListener('click', () => {
+    const title = document.getElementById('add-title').value.trim();
+    const url = document.getElementById('add-url').value.trim();
+    const category = document.getElementById('add-category').value.trim();
+    const desc = document.getElementById('add-desc').value.trim();
+
+    if (!title || !url || !category) {
+      alert('Titolo, URL e Categoria sono obbligatori.');
+      return;
+    }
+
+    const fullUrl = url.startsWith('http') ? url : 'https://' + url;
+    links.push({ title, url: fullUrl, category, desc });
+    saveAndRender();
+    document.getElementById('add-title').value = '';
+    document.getElementById('add-url').value = '';
+    document.getElementById('add-category').value = '';
+    document.getElementById('add-desc').value = '';
+    addModal.classList.remove('active');
+  });
+
+  function openEditModal(index) {
+    const link = links[index];
+    document.getElementById('edit-index').value = index;
+    document.getElementById('edit-title').value = link.title;
+    document.getElementById('edit-url').value = link.url;
+    document.getElementById('edit-category').value = link.category;
+    document.getElementById('edit-desc').value = link.desc || '';
+    editModal.classList.add('active');
+    updateSuggestions(document.getElementById('edit-category'), document.getElementById('edit-category-suggestions'));
+  }
+
+  document.getElementById('edit-save').addEventListener('click', () => {
+    const index = parseInt(document.getElementById('edit-index').value);
+    const title = document.getElementById('edit-title').value.trim();
+    const url = document.getElementById('edit-url').value.trim();
+    const category = document.getElementById('edit-category').value.trim();
+    const desc = document.getElementById('edit-desc').value.trim();
+
+    if (!title || !url || !category) {
+      alert('Titolo, URL e Categoria sono obbligatori.');
+      return;
+    }
+
+    const fullUrl = url.startsWith('http') ? url : 'https://' + url;
+    links[index] = { title, url: fullUrl, category, desc };
+    saveAndRender();
+    editModal.classList.remove('active');
+  });
+
+  function deleteLink(index) {
+    if (confirm('Sei sicuro di voler eliminare questo link?')) {
+      const deletedLink = links[index];
+      const cat = deletedLink.category.trim() || 'Senza categoria';
+      const deletedId = getLinkId(deletedLink);
+      if (pinnedLinks[cat] === deletedId) {
+        delete pinnedLinks[cat];
+        localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+      }
+      links.splice(index, 1);
+      saveAndRender();
+    }
+  }
+
+  function saveAndRender(searchTerm = '') {
+    localStorage.setItem('toolboxLinks', JSON.stringify(links));
+    renderLinks(searchTerm);
+  }
+
+  exportBtn.addEventListener('click', () => {
+    const today = formatDate(new Date());
+    const filename = `backup_${today}.json`;
+    const dataStr = JSON.stringify(links, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(`Esportato: ${filename}`);
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    const json = JSON.stringify(links, null, 2);
+    try {
+      await navigator.clipboard.writeText(json);
+      showToast('JSON copiato negli appunti!');
+    } catch (err) {
+      alert('Impossibile copiare. Prova con Esporta.');
+    }
+  });
+
+  importBtn.addEventListener('click', () => importFile.click());
+  importFile.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const loaded = JSON.parse(event.target.result);
+        if (!Array.isArray(loaded)) throw new Error('Formato non valido');
+
+        const valid = loaded.every(item =>
+          typeof item.title === 'string' &&
+          typeof item.url === 'string' &&
+          typeof item.category === 'string'
+        );
+
+        if (!valid) throw new Error('Dati non conformi');
+
+        if (confirm(`Sovrascriverai i ${links.length} link attuali con ${loaded.length} link caricati. Procedere?`)) {
+          links = loaded;
+          pinnedLinks = {};
+          pinnedCategory = null;
+          localStorage.removeItem('pinnedCategory');
+          localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+          saveAndRender();
+          showToast('Link importati con successo!');
+        }
+      } catch (err) {
+        alert('Errore durante l’importazione:\n' + err.message);
+      }
+      importFile.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  // === Render Links ===
+  function renderLinks(searchTerm = '') {
+    const container = document.getElementById('links-container');
+    container.innerHTML = '';
+
+    let filteredLinks = links;
+    if (searchTerm) {
+      filteredLinks = links.filter(link =>
+        link.title.toLowerCase().includes(searchTerm) ||
+        link.url.toLowerCase().includes(searchTerm) ||
+        (link.desc && link.desc.toLowerCase().includes(searchTerm)) ||
+        link.category.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    if (filteredLinks.length === 0) {
+      container.innerHTML = '<div class="no-results">Nessun link trovato.</div>';
+      return;
+    }
+
+    const groups = {};
+    filteredLinks.forEach((link, index) => {
+      const cat = link.category.trim() || 'Senza categoria';
+      if (!groups[cat]) groups[cat] = [];
+      const originalIndex = links.findIndex(l => 
+        l.title === link.title && l.url === link.url && l.category === link.category
+      );
+      groups[cat].push({ ...link, originalIndex });
+    });
+
+    let allCategories = Object.keys(groups).sort((a, b) => a.localeCompare(b, 'it', { sensitivity: 'base' }));
+
+    if (pinnedCategory && allCategories.includes(pinnedCategory)) {
+      allCategories = [pinnedCategory, ...allCategories.filter(c => c !== pinnedCategory)];
+    }
+
+    allCategories.forEach(cat => {
+      const section = document.createElement('div');
+      section.className = 'category';
+
+      const titleEl = document.createElement('h2');
+      titleEl.className = 'section-title';
+
+      const showCatPin = !pinnedCategory || pinnedCategory === cat;
+      let pinSpan, nameSpan;
+
+      if (showCatPin) {
+        pinSpan = document.createElement('span');
+        pinSpan.textContent = '📌';
+        titleEl.appendChild(pinSpan);
+      }
+
+      nameSpan = document.createElement('span');
+      nameSpan.textContent = cat;
+      titleEl.appendChild(nameSpan);
+
+      // Bottone modifica
+      const editBtn = document.createElement('button');
+      editBtn.textContent = '✏️';
+      editBtn.style.background = 'none';
+      editBtn.style.border = 'none';
+      editBtn.style.color = 'var(--primary)';
+      editBtn.style.cursor = 'pointer';
+      editBtn.style.marginLeft = '0.5rem';
+      editBtn.style.fontSize = '0.9rem';
+      editBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // ← IMPORTANTE: blocca il click sul titolo
+        startRenameCategory(cat, nameSpan);
+      });
+      titleEl.appendChild(editBtn);
+
+      // Clic sul titolo (escluso il bottone) → pin
+      if (showCatPin) {
+        titleEl.style.cursor = 'pointer';
+        titleEl.addEventListener('click', (e) => {
+          if (e.target !== editBtn) {
+            togglePinCategory(cat);
+          }
+        });
+      }
+
+      section.appendChild(titleEl);
+
+      // Link nella categoria
+      let categoryLinks = groups[cat].sort((a, b) => a.title.localeCompare(b.title, 'it', { sensitivity: 'base' }));
+      const pinnedId = pinnedLinks[cat];
+      if (pinnedId) {
+        const pinnedLink = categoryLinks.find(link => getLinkId(link) === pinnedId);
+        if (pinnedLink) {
+          categoryLinks = [pinnedLink, ...categoryLinks.filter(link => getLinkId(link) !== pinnedId)];
+        }
+      }
+
+      categoryLinks.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'link-item';
+
+        const linkId = getLinkId(item);
+        const showLinkPin = !pinnedLinks[cat] || pinnedLinks[cat] === linkId;
+
+        const h3 = document.createElement('h3');
+        if (showLinkPin) {
+          const pinLink = document.createElement('span');
+          pinLink.textContent = '📌';
+          pinLink.style.cursor = 'pointer';
+          pinLink.style.marginRight = '0.4rem';
+          pinLink.addEventListener('click', () => togglePinLink(cat, linkId));
+          h3.appendChild(pinLink);
+        }
+
+        const linkA = document.createElement('a');
+        linkA.href = item.url;
+        linkA.target = '_blank';
+        linkA.rel = 'noopener noreferrer';
+        linkA.textContent = item.title;
+        linkA.style.color = 'var(--primary)';
+        linkA.style.textDecoration = 'none';
+        linkA.style.flex = '1';
+        linkA.addEventListener('mouseover', () => linkA.style.textDecoration = 'underline');
+        linkA.addEventListener('mouseout', () => linkA.style.textDecoration = 'none');
+        h3.appendChild(linkA);
+
+        itemEl.appendChild(h3);
+
+        if (item.desc) {
+          const descP = document.createElement('p');
+          descP.className = 'desc';
+          descP.textContent = item.desc;
+          itemEl.appendChild(descP);
+        }
+
+        // Pulsanti azione
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'link-actions';
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn btn-warning';
+        editBtn.title = 'Modifica';
+        editBtn.textContent = '✏️';
+        editBtn.addEventListener('click', () => openEditModal(item.originalIndex));
+        actionsDiv.appendChild(editBtn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-danger';
+        deleteBtn.title = 'Elimina';
+        deleteBtn.textContent = '🗑️';
+        deleteBtn.addEventListener('click', () => deleteLink(item.originalIndex));
+        actionsDiv.appendChild(deleteBtn);
+
+        itemEl.appendChild(actionsDiv);
+        section.appendChild(itemEl);
+      });
+
+      container.appendChild(section);
+    });
+  }
+
+  // === Funzione per rinominare categoria ===
+  function startRenameCategory(oldName, nameSpan) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'rename-input';
+    input.value = oldName;
+    input.select();
+
+    const handleRename = () => {
+      const newName = input.value;
+      nameSpan.replaceWith(nameSpan.cloneNode(true)); // ripristina temporaneamente
+      if (renameCategory(oldName, newName)) {
+        // L'aggiornamento avviene in saveAndRender()
+      }
+    };
+
+    input.addEventListener('blur', handleRename);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleRename();
+      if (e.key === 'Escape') {
+        nameSpan.replaceWith(nameSpan.cloneNode(true));
+      }
+    });
+
+    nameSpan.replaceWith(input);
+    input.focus();
+  }
+
+  // === Avvia ===
+  renderLinks();
+</script>
+</body>
+</html>
