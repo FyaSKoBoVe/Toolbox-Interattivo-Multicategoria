@@ -16,7 +16,7 @@
       --secondary: #7e22ce;
       --warning: #c084fc;
       --danger: #ef4444;
-      --icon-color: #1e1b4b; /* Icone scure nel tema chiaro */
+      --icon-color: #1e1b4b;
       --shadow: 0 2px 6px rgba(139, 92, 246, 0.15);
     }
 
@@ -30,8 +30,71 @@
       --secondary: #8b5cf6;
       --warning: #c084fc;
       --danger: #f87171;
-      --icon-color: #ffffff; /* Icone bianche nel tema scuro */
+      --icon-color: #ffffff;
       --shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    /* === ANIMAZIONI === */
+    @keyframes gradient-float {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    @keyframes float-orb-1 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      33% {
+        transform: translate(30px, -30px) scale(1.1);
+      }
+      66% {
+        transform: translate(-20px, 20px) scale(0.9);
+      }
+    }
+
+    @keyframes float-orb-2 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      33% {
+        transform: translate(-40px, 30px) scale(0.9);
+      }
+      66% {
+        transform: translate(25px, -25px) scale(1.15);
+      }
+    }
+
+    @keyframes float-orb-3 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(20px, 40px) scale(1.05);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
     }
 
     * {
@@ -46,10 +109,58 @@
       color: var(--text);
       padding: 0;
       margin: 0;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .dark-theme::before {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.4), transparent);
+      top: -100px;
+      left: -100px;
+      animation: float-orb-1 20s ease-in-out infinite;
+    }
+
+    .dark-theme::after {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(126, 34, 206, 0.3), transparent);
+      bottom: -50px;
+      right: -50px;
+      animation: float-orb-2 25s ease-in-out infinite;
+    }
+
+    .light-theme::before {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.2), transparent);
+      top: -100px;
+      right: -100px;
+      animation: float-orb-1 20s ease-in-out infinite;
+    }
+
+    .light-theme::after {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(192, 132, 252, 0.15), transparent);
+      bottom: -50px;
+      left: -50px;
+      animation: float-orb-2 25s ease-in-out infinite;
     }
 
     header {
@@ -60,6 +171,8 @@
       background: var(--surface);
       box-shadow: var(--shadow);
       z-index: 10;
+      position: relative;
+      transition: all 0.3s ease;
     }
 
     h1 {
@@ -81,6 +194,13 @@
       outline: none;
       background: var(--surface);
       color: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    #global-search:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+      transform: translateY(-1px);
     }
 
     #search-icon {
@@ -109,11 +229,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.3s ease;
     }
 
     #theme-toggle:hover {
       background: var(--primary);
       color: white;
+      transform: rotate(20deg) scale(1.1);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
     }
 
     #add-btn {
@@ -129,10 +252,17 @@
       align-items: center;
       justify-content: center;
       box-shadow: var(--shadow);
+      transition: all 0.3s ease;
     }
 
     #add-btn:hover {
       background: var(--secondary);
+      transform: rotate(90deg) scale(1.15);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+    }
+
+    #add-btn:active {
+      transform: rotate(90deg) scale(1.05);
     }
 
     .backup-btn {
@@ -147,10 +277,18 @@
       gap: 0.35rem;
       font-size: 0.88rem;
       color: var(--text);
+      transition: all 0.3s ease;
     }
 
     .backup-btn:hover {
-      background: #2d2a4a;
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .backup-btn:active {
+      transform: translateY(0);
     }
 
     .modal {
@@ -212,6 +350,7 @@
       font-size: 0.92rem;
       background: var(--surface);
       color: var(--text);
+      transition: all 0.3s ease;
     }
 
     .form-group input:focus,
@@ -219,6 +358,7 @@
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+      transform: translateY(-1px);
     }
 
     #category-suggestions,
@@ -263,6 +403,27 @@
       font-weight: bold;
       cursor: pointer;
       font-size: 0.92rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
     }
 
     .btn-primary { background: var(--primary); color: white; }
@@ -270,123 +431,194 @@
     .btn-warning { background: var(--warning); color: #0f172a; }
     .btn-danger { background: var(--danger); color: white; }
 
-    .btn:hover { opacity: 0.9; }
+    .btn:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
 
     #links-container {
-      flex: 1;
       padding: 1rem 1.2rem;
-      overflow-y: auto;
       column-count: 1;
+      column-gap: 0.5rem;
+      min-height: calc(100vh - 80px);
+      position: relative;
+      z-index: 1;
     }
 
     @media (min-width: 480px) {
-      #links-container { column-count: 2; }
+      #links-container { 
+        column-count: 2;
+      }
     }
+
     @media (min-width: 768px) {
-      #links-container { column-count: 4; column-gap: 0.9rem; padding: 1.1rem 1.4rem; }
+      #links-container { 
+        column-count: 4;
+      }
     }
+
     @media (min-width: 1400px) {
-      #links-container { column-count: 6; column-gap: 1rem; }
+      #links-container { 
+        column-count: 6;
+      }
     }
+
     @media (min-width: 1920px) {
-      #links-container { column-count: 8; column-gap: 1.1rem; }
+      #links-container { 
+        column-count: 8;
+      }
     }
+
     @media (min-width: 2560px) {
-      #links-container { column-count: 10; column-gap: 1.2rem; }
+      #links-container { 
+        column-count: 10;
+      }
     }
 
     .category {
-      break-inside: avoid-column;
-      margin-bottom: 1rem;
+      background: transparent;
+      padding: 0.3rem;
+      border-radius: 6px;
+      margin-bottom: 0.4rem;
+      box-shadow: none;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      display: inline-block;
+      width: 100%;
+      animation: fadeIn 0.5s ease-out;
     }
 
     .section-title {
-      font-size: 1.1rem;
-      margin-bottom: 0.7rem;
-      padding-bottom: 0.35rem;
-      border-bottom: 2px solid var(--primary);
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
       color: var(--primary);
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.3rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
+      justify-content: space-between;
     }
 
-    .rename-input {
-      background: var(--surface);
-      border: 1px solid var(--primary);
-      color: var(--text);
-      font-size: 1.1rem;
-      font-weight: bold;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      width: 120px;
+    .section-title-left {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex: 1;
+    }
+
+    .section-title-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex-shrink: 0;
     }
 
     .link-item {
       background: var(--surface);
-      padding: 0.55rem;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      margin-bottom: 0.7rem;
+      padding: 0.5rem;
+      border-radius: 5px;
+      margin-bottom: 0.3rem;
+      border-left: none;
+      transition: all 0.3s ease;
+      width: 100%;
+      display: block;
       position: relative;
-      min-height: 54px;
-      break-inside: avoid;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .link-item:hover {
+      background: rgba(139, 92, 246, 0.08);
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+    }
+
+    .link-content {
+      padding-right: 1.5rem;
+    }
+
+    .link-item h3 {
       font-size: 0.9rem;
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .link-item .desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0;
+      line-height: 1.3;
     }
 
     .link-actions {
       position: absolute;
-      top: 0.45rem;
-      right: 0.45rem;
+      right: 0.3rem;
+      top: 0.3rem;
+      bottom: 0.3rem;
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      justify-content: space-between;
+      padding: 0;
     }
 
-    .link-actions button {
-      width: 18px;
-      height: 18px;
+    .link-actions .btn {
+      font-size: 0.72rem;
       padding: 0;
-      font-size: 0.6rem;
+      min-width: auto;
+      height: auto;
+      line-height: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 3px;
+      background: transparent;
       border: none;
-      color: var(--icon-color); /* ← ICONA PIÙ VISIBILE */
-      background: rgba(255,255,255,0.15); /* Sfondo semi-trasparente per contrasto */
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .link-item h3 {
-      margin-bottom: 0.2rem;
-      font-size: 0.9rem;
-      padding-right: 26px;
-      line-height: 1.25;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+    .link-actions .btn-warning {
+      color: var(--warning);
+      align-self: flex-start;
     }
 
-    .link-item a {
+    .link-actions .btn-warning:hover {
       color: var(--primary);
-      text-decoration: none;
-      flex: 1;
+      opacity: 1;
+      transform: scale(1.3) rotate(12deg);
     }
 
-    .link-item a:hover {
-      text-decoration: underline;
+    .link-actions .btn-danger {
+      color: var(--danger);
+      align-self: flex-end;
     }
 
-    .link-item p.desc {
-      margin-top: 0.2rem;
+    .link-actions .btn-danger:hover {
+      color: #dc2626;
+      opacity: 1;
+      transform: scale(1.3) rotate(-12deg);
+    }
+
+    .no-results {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 1.1rem;
       color: var(--text-secondary);
-      font-size: 0.78rem;
-      line-height: 1.3;
     }
 
-    #import-file {
-      display: none;
+    .rename-input {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--primary);
+      border-radius: 4px;
+      padding: 0.2rem 0.4rem;
+      font-size: 1rem;
+      font-weight: 600;
     }
 
     #toast {
@@ -396,142 +628,124 @@
       transform: translateX(-50%);
       background: var(--primary);
       color: white;
-      padding: 0.65rem 1.2rem;
-      border-radius: 8px;
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 600;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 100;
+      z-index: 30;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
-      font-size: 0.9rem;
+      transition: opacity 0.3s ease;
     }
 
     #toast.show {
       opacity: 1;
-    }
-
-    .no-results {
-      text-align: center;
-      color: var(--text-secondary);
-      font-style: italic;
-      padding: 1.8rem;
-      grid-column: 1 / -1;
+      pointer-events: auto;
     }
   </style>
 </head>
 <body class="dark-theme">
-  <header>
-    <h1>🛠️ La Mia Toolbox</h1>
-    <div class="search-box">
-      <span id="search-icon">🔍</span>
-      <input type="text" id="global-search" placeholder="Cerca link..." />
-    </div>
-    <div class="header-actions">
-      <button id="theme-toggle" title="Cambia tema">🌙</button>
-      <button class="backup-btn" id="copy-btn">📋 Copia</button>
-      <button class="backup-btn" id="export-btn">📥 Esporta</button>
-      <button class="backup-btn" id="import-btn">📤 Importa</button>
-      <button id="add-btn">+</button>
-    </div>
-  </header>
 
-  <div id="toast">Operazione completata!</div>
-  <input type="file" id="import-file" accept=".json" />
+<header>
+  <h1>🛠️ La Mia Toolbox</h1>
+  <div class="search-box">
+    <span id="search-icon">🔍</span>
+    <input type="text" id="global-search" placeholder="Cerca link...">
+  </div>
+  <div class="header-actions">
+    <button class="backup-btn" id="export-btn" title="Esporta JSON">💾 Esporta</button>
+    <button class="backup-btn" id="copy-btn" title="Copia JSON negli appunti">📋 Copia</button>
+    <button class="backup-btn" id="import-btn" title="Importa JSON">📥 Importa</button>
+    <button id="theme-toggle" title="Cambia tema">🌙</button>
+    <button id="add-btn" title="Aggiungi link">+</button>
+  </div>
+</header>
 
-  <!-- Modale Aggiungi -->
-  <div class="modal" id="add-modal">
-    <div class="modal-content">
-      <h2>Aggiungi un nuovo link</h2>
+<div id="links-container"></div>
+
+<div id="add-modal" class="modal">
+  <div class="modal-content">
+    <h2>Aggiungi Link</h2>
+    <form id="add-form">
       <div class="form-group">
-        <label for="add-title">Titolo *</label>
-        <input type="text" id="add-title" placeholder="Es. GitHub" />
+        <label>Titolo*</label>
+        <input type="text" id="title" placeholder="Es: Google" required>
       </div>
       <div class="form-group">
-        <label for="add-url">URL *</label>
-        <input type="url" id="add-url" placeholder="https://esempio.com" />
+        <label>URL*</label>
+        <input type="url" id="url" placeholder="Es: google.com o https://google.com" required>
       </div>
-      <div class="form-group" id="category-group">
-        <label for="add-category">Categoria *</label>
-        <input type="text" id="add-category" placeholder="Nuova o seleziona..." autocomplete="off" />
+      <div class="form-group">
+        <label>Categoria*</label>
+        <input type="text" id="category" placeholder="Es: Motori di ricerca" required autocomplete="off">
         <div id="category-suggestions"></div>
       </div>
       <div class="form-group">
-        <label for="add-desc">Descrizione (opzionale)</label>
-        <textarea id="add-desc" rows="2" placeholder="Breve descrizione..."></textarea>
+        <label>Descrizione (opzionale)</label>
+        <textarea id="desc" rows="2" placeholder="Breve descrizione..."></textarea>
       </div>
       <div class="form-actions">
-        <button class="btn btn-secondary" id="add-cancel">Annulla</button>
-        <button class="btn btn-primary" id="add-save">Salva</button>
+        <button type="button" class="btn btn-secondary" id="cancel-btn">Annulla</button>
+        <button type="submit" class="btn btn-primary">Aggiungi</button>
       </div>
-    </div>
+    </form>
   </div>
+</div>
 
-  <!-- Modale Modifica -->
-  <div class="modal" id="edit-modal">
-    <div class="modal-content">
-      <h2>Modifica link</h2>
-      <input type="hidden" id="edit-index" />
+<div id="edit-modal" class="modal">
+  <div class="modal-content">
+    <h2>Modifica Link</h2>
+    <form id="edit-form">
       <div class="form-group">
-        <label for="edit-title">Titolo *</label>
-        <input type="text" id="edit-title" placeholder="Es. GitHub" />
+        <label>Titolo*</label>
+        <input type="text" id="edit-title" required>
       </div>
       <div class="form-group">
-        <label for="edit-url">URL *</label>
-        <input type="url" id="edit-url" placeholder="https://esempio.com" />
+        <label>URL*</label>
+        <input type="url" id="edit-url" required>
       </div>
-      <div class="form-group" id="edit-category-group">
-        <label for="edit-category">Categoria *</label>
-        <input type="text" id="edit-category" placeholder="Nuova o seleziona..." autocomplete="off" />
+      <div class="form-group">
+        <label>Categoria*</label>
+        <input type="text" id="edit-category" required autocomplete="off">
         <div id="edit-category-suggestions"></div>
       </div>
       <div class="form-group">
-        <label for="edit-desc">Descrizione (opzionale)</label>
-        <textarea id="edit-desc" rows="2" placeholder="Breve descrizione..."></textarea>
+        <label>Descrizione (opzionale)</label>
+        <textarea id="edit-desc" rows="2"></textarea>
       </div>
       <div class="form-actions">
-        <button class="btn btn-secondary" id="edit-cancel">Annulla</button>
-        <button class="btn btn-warning" id="edit-save">Aggiorna</button>
+        <button type="button" class="btn btn-secondary" id="edit-cancel-btn">Annulla</button>
+        <button type="submit" class="btn btn-primary">Salva</button>
       </div>
-    </div>
+    </form>
   </div>
+</div>
 
-  <div id="links-container"></div>
+<input type="file" id="import-file" accept=".json" style="display: none;">
+<div id="toast"></div>
 
 <script>
-  // === Gestione Tema ===
-  const body = document.body;
-  const themeToggle = document.getElementById('theme-toggle');
-  const savedTheme = localStorage.getItem('theme');
-  const useDark = savedTheme !== 'light';
-  body.className = useDark ? 'dark-theme' : 'light-theme';
-  themeToggle.textContent = useDark ? '🌙' : '☀️';
-  themeToggle.title = useDark ? 'Passa a tema chiaro' : 'Passa a tema scuro';
-
-  themeToggle.addEventListener('click', () => {
-    const isNowLight = body.classList.contains('dark-theme');
-    body.className = isNowLight ? 'light-theme' : 'dark-theme';
-    const newMode = isNowLight ? 'light' : 'dark';
-    localStorage.setItem('theme', newMode);
-    themeToggle.textContent = isNowLight ? '☀️' : '🌙';
-    themeToggle.title = isNowLight ? 'Passa a tema scuro' : 'Passa a tema chiaro';
-  });
-
-  // === Dati ===
   let links = JSON.parse(localStorage.getItem('toolboxLinks')) || [];
-  let pinnedCategory = localStorage.getItem('pinnedCategory') || null;
   let pinnedLinks = JSON.parse(localStorage.getItem('pinnedLinks')) || {};
+  let pinnedCategory = localStorage.getItem('pinnedCategory') || null;
 
-  // === Helper ===
-  function formatDate(date) {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  }
-
-  function getLinkId(link) {
-    return btoa(link.url + '|' + link.title).replace(/=/g, '');
-  }
+  const addModal = document.getElementById('add-modal');
+  const editModal = document.getElementById('edit-modal');
+  const addBtn = document.getElementById('add-btn');
+  const cancelBtn = document.getElementById('cancel-btn');
+  const editCancelBtn = document.getElementById('edit-cancel-btn');
+  const addForm = document.getElementById('add-form');
+  const editForm = document.getElementById('edit-form');
+  const exportBtn = document.getElementById('export-btn');
+  const copyBtn = document.getElementById('copy-btn');
+  const importBtn = document.getElementById('import-btn');
+  const importFile = document.getElementById('import-file');
+  const themeToggle = document.getElementById('theme-toggle');
+  const searchInput = document.getElementById('global-search');
+  const categorySuggestions = document.getElementById('category-suggestions');
+  const editCategorySuggestions = document.getElementById('edit-category-suggestions');
+  const categoryInput = document.getElementById('category');
+  const editCategoryInput = document.getElementById('edit-category');
 
   function showToast(message) {
     const toast = document.getElementById('toast');
@@ -540,183 +754,166 @@
     setTimeout(() => toast.classList.remove('show'), 2500);
   }
 
-  function getUniqueCategories() {
-    return [...new Set(links.map(l => l.category.trim()).filter(c => c))]
-      .sort((a, b) => a.localeCompare(b, 'it', { sensitivity: 'base' }));
-  }
+  let isDark = localStorage.getItem('isDark') === 'true';
+  applyTheme(isDark);
 
-  // === Rinomina Categoria ===
-  function renameCategory(oldName, newName) {
-    if (!newName.trim()) {
-      showToast('Il nome non può essere vuoto.');
-      return false;
-    }
-    const finalNewName = newName.trim();
-    links = links.map(link => 
-      link.category === oldName ? { ...link, category: finalNewName } : link
-    );
-    
-    if (pinnedCategory === oldName) {
-      pinnedCategory = finalNewName;
-      localStorage.setItem('pinnedCategory', finalNewName);
-    }
-    
-    if (pinnedLinks[oldName]) {
-      pinnedLinks[finalNewName] = pinnedLinks[oldName];
-      delete pinnedLinks[oldName];
-      localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
-    }
-    
-    saveAndRender();
-    showToast(`Categoria rinominata in "${finalNewName}"!`);
-    return true;
-  }
+  themeToggle.addEventListener('click', () => {
+    isDark = !isDark;
+    applyTheme(isDark);
+    localStorage.setItem('isDark', isDark);
+  });
 
-  // === Pin Categorie ===
-  function togglePinCategory(category) {
-    if (pinnedCategory === category) {
-      pinnedCategory = null;
-      localStorage.removeItem('pinnedCategory');
-      showToast(`Categoria "${category}" non più fissata.`);
+  function applyTheme(dark) {
+    if (dark) {
+      document.body.classList.remove('light-theme');
+      document.body.classList.add('dark-theme');
+      themeToggle.textContent = '☀️';
     } else {
-      pinnedCategory = category;
-      localStorage.setItem('pinnedCategory', category);
-      showToast(`Categoria "${category}" fissata in cima!`);
+      document.body.classList.remove('dark-theme');
+      document.body.classList.add('light-theme');
+      themeToggle.textContent = '🌙';
     }
-    renderLinks();
   }
 
-  // === Pin Link per Categoria ===
-  function togglePinLink(category, linkId) {
-    if (pinnedLinks[category] === linkId) {
-      delete pinnedLinks[category];
-      localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
-      showToast('Link non più fissato in questa categoria.');
-    } else {
-      pinnedLinks[category] = linkId;
-      localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
-      showToast('Link fissato in cima a questa categoria!');
+  function getCategories() {
+    const cats = links.map(l => l.category.trim()).filter(Boolean);
+    return [...new Set(cats)];
+  }
+
+  function showCategorySuggestions(inputEl, suggestionsEl) {
+    const value = inputEl.value.trim().toLowerCase();
+    if (!value) {
+      suggestionsEl.style.display = 'none';
+      return;
     }
-    renderLinks();
-  }
+    const categories = getCategories();
+    const filtered = categories.filter(cat => cat.toLowerCase().includes(value));
 
-  // === Dropdown Categorie ===
-  function setupCategoryDropdown(inputId, suggestionsId) {
-    const input = document.getElementById(inputId);
-    const suggestions = document.getElementById(suggestionsId);
-
-    input.addEventListener('focus', () => {
-      updateSuggestions(input, suggestions);
-      suggestions.style.display = 'block';
-    });
-
-    input.addEventListener('input', () => {
-      updateSuggestions(input, suggestions);
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!input.contains(e.target) && !suggestions.contains(e.target)) {
-        suggestions.style.display = 'none';
-      }
-    });
-  }
-
-  function updateSuggestions(input, suggestionsEl) {
-    const value = input.value.trim();
-    const categories = getUniqueCategories();
-    suggestionsEl.innerHTML = '';
-
-    const uniqueCats = categories.filter(cat => 
-      cat.toLowerCase().includes(value.toLowerCase()) && cat !== value
-    );
-
-    if (uniqueCats.length === 0 && (!value || categories.includes(value))) {
+    if (filtered.length === 0) {
       suggestionsEl.style.display = 'none';
       return;
     }
 
-    uniqueCats.forEach(cat => {
-      const option = document.createElement('div');
-      option.className = 'category-option';
-      option.textContent = cat;
-      option.addEventListener('click', () => {
-        input.value = cat;
+    suggestionsEl.innerHTML = '';
+    filtered.forEach(cat => {
+      const div = document.createElement('div');
+      div.className = 'category-option';
+      div.textContent = cat;
+      div.addEventListener('click', () => {
+        inputEl.value = cat;
         suggestionsEl.style.display = 'none';
-        input.focus();
       });
-      suggestionsEl.appendChild(option);
+      suggestionsEl.appendChild(div);
     });
 
-    if (suggestionsEl.children.length > 0) {
-      suggestionsEl.style.display = 'block';
+    suggestionsEl.style.display = 'block';
+  }
+
+  categoryInput.addEventListener('input', () => showCategorySuggestions(categoryInput, categorySuggestions));
+  editCategoryInput.addEventListener('input', () => showCategorySuggestions(editCategoryInput, editCategorySuggestions));
+
+  document.addEventListener('click', (e) => {
+    if (!categorySuggestions.contains(e.target) && e.target !== categoryInput) {
+      categorySuggestions.style.display = 'none';
     }
-  }
-
-  // === Ricerca ===
-  function filterLinks() {
-    const term = document.getElementById('global-search').value.trim().toLowerCase();
-    renderLinks(term);
-  }
-
-  // === Setup iniziale ===
-  const addModal = document.getElementById('add-modal');
-  const editModal = document.getElementById('edit-modal');
-  const addBtn = document.getElementById('add-btn');
-  const exportBtn = document.getElementById('export-btn');
-  const importBtn = document.getElementById('import-btn');
-  const copyBtn = document.getElementById('copy-btn');
-  const importFile = document.getElementById('import-file');
-  const searchInput = document.getElementById('global-search');
-
-  setupCategoryDropdown('add-category', 'category-suggestions');
-  setupCategoryDropdown('edit-category', 'edit-category-suggestions');
-  searchInput.addEventListener('input', filterLinks);
-
-  // === Eventi ===
-  addBtn.addEventListener('click', () => {
-    updateSuggestions(document.getElementById('add-category'), document.getElementById('category-suggestions'));
-    addModal.classList.add('active');
+    if (!editCategorySuggestions.contains(e.target) && e.target !== editCategoryInput) {
+      editCategorySuggestions.style.display = 'none';
+    }
   });
 
-  document.getElementById('add-cancel').addEventListener('click', () => addModal.classList.remove('active'));
-  addModal.addEventListener('click', (e) => { if (e.target === addModal) addModal.classList.remove('active'); });
+  function getLinkId(link) {
+    return `${link.title}|${link.url}`;
+  }
 
-  document.getElementById('add-save').addEventListener('click', () => {
-    const title = document.getElementById('add-title').value.trim();
-    const url = document.getElementById('add-url').value.trim();
-    const category = document.getElementById('add-category').value.trim();
-    const desc = document.getElementById('add-desc').value.trim();
+  function togglePinCategory(cat) {
+    if (pinnedCategory === cat) {
+      pinnedCategory = null;
+      localStorage.removeItem('pinnedCategory');
+    } else {
+      pinnedCategory = cat;
+      localStorage.setItem('pinnedCategory', cat);
+    }
+    renderLinks();
+  }
+
+  function togglePinLink(cat, linkId) {
+    if (pinnedLinks[cat] === linkId) {
+      delete pinnedLinks[cat];
+    } else {
+      pinnedLinks[cat] = linkId;
+    }
+    localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+    renderLinks();
+  }
+
+  searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    renderLinks(searchTerm);
+  });
+
+  addBtn.addEventListener('click', () => addModal.classList.add('active'));
+  cancelBtn.addEventListener('click', () => {
+    addModal.classList.remove('active');
+    addForm.reset();
+  });
+  editCancelBtn.addEventListener('click', () => {
+    editModal.classList.remove('active');
+    editForm.reset();
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === addModal) {
+      addModal.classList.remove('active');
+      addForm.reset();
+    }
+    if (e.target === editModal) {
+      editModal.classList.remove('active');
+      editForm.reset();
+    }
+  });
+
+  addForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('title').value.trim();
+    let url = document.getElementById('url').value.trim();
+    const category = document.getElementById('category').value.trim();
+    const desc = document.getElementById('desc').value.trim();
 
     if (!title || !url || !category) {
       alert('Titolo, URL e Categoria sono obbligatori.');
       return;
     }
 
-    const fullUrl = url.startsWith('http') ? url : 'https://' + url;
-    links.push({ title, url: fullUrl, category, desc });
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'https://' + url;
+    }
+
+    links.push({ title, url, category, desc });
     saveAndRender();
-    document.getElementById('add-title').value = '';
-    document.getElementById('add-url').value = '';
-    document.getElementById('add-category').value = '';
-    document.getElementById('add-desc').value = '';
     addModal.classList.remove('active');
+    addForm.reset();
+    showToast('Link aggiunto con successo!');
   });
 
+  let editingIndex = -1;
+
   function openEditModal(index) {
+    editingIndex = index;
     const link = links[index];
-    document.getElementById('edit-index').value = index;
     document.getElementById('edit-title').value = link.title;
     document.getElementById('edit-url').value = link.url;
     document.getElementById('edit-category').value = link.category;
     document.getElementById('edit-desc').value = link.desc || '';
     editModal.classList.add('active');
-    updateSuggestions(document.getElementById('edit-category'), document.getElementById('edit-category-suggestions'));
   }
 
-  document.getElementById('edit-save').addEventListener('click', () => {
-    const index = parseInt(document.getElementById('edit-index').value);
+  editForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const index = editingIndex;
+    if (index < 0) return;
+
     const title = document.getElementById('edit-title').value.trim();
-    const url = document.getElementById('edit-url').value.trim();
+    let url = document.getElementById('edit-url').value.trim();
     const category = document.getElementById('edit-category').value.trim();
     const desc = document.getElementById('edit-desc').value.trim();
 
@@ -750,10 +947,25 @@
     renderLinks(searchTerm);
   }
 
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   exportBtn.addEventListener('click', () => {
     const today = formatDate(new Date());
     const filename = `backup_${today}.json`;
-    const dataStr = JSON.stringify(links, null, 2);
+    
+    // Creo un oggetto con tutti i dati
+    const backupData = {
+      links: links,
+      pinnedLinks: pinnedLinks,
+      pinnedCategory: pinnedCategory
+    };
+    
+    const dataStr = JSON.stringify(backupData, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
     const a = document.createElement('a');
@@ -767,7 +979,12 @@
   });
 
   copyBtn.addEventListener('click', async () => {
-    const json = JSON.stringify(links, null, 2);
+    const backupData = {
+      links: links,
+      pinnedLinks: pinnedLinks,
+      pinnedCategory: pinnedCategory
+    };
+    const json = JSON.stringify(backupData, null, 2);
     try {
       await navigator.clipboard.writeText(json);
       showToast('JSON copiato negli appunti!');
@@ -785,9 +1002,23 @@
     reader.onload = (event) => {
       try {
         const loaded = JSON.parse(event.target.result);
-        if (!Array.isArray(loaded)) throw new Error('Formato non valido');
+        
+        let newLinks, newPinnedLinks = {}, newPinnedCategory = null;
+        
+        // Controllo se è il nuovo formato (con pinnedLinks) o il vecchio (solo array)
+        if (Array.isArray(loaded)) {
+          // Vecchio formato: solo array di links
+          newLinks = loaded;
+        } else if (loaded.links && Array.isArray(loaded.links)) {
+          // Nuovo formato: oggetto con links, pinnedLinks, pinnedCategory
+          newLinks = loaded.links;
+          newPinnedLinks = loaded.pinnedLinks || {};
+          newPinnedCategory = loaded.pinnedCategory || null;
+        } else {
+          throw new Error('Formato non valido');
+        }
 
-        const valid = loaded.every(item =>
+        const valid = newLinks.every(item =>
           typeof item.title === 'string' &&
           typeof item.url === 'string' &&
           typeof item.category === 'string'
@@ -795,24 +1026,103 @@
 
         if (!valid) throw new Error('Dati non conformi');
 
-        if (confirm(`Sovrascriverai i ${links.length} link attuali con ${loaded.length} link caricati. Procedere?`)) {
-          links = loaded;
-          pinnedLinks = {};
-          pinnedCategory = null;
-          localStorage.removeItem('pinnedCategory');
+        if (confirm(`Sovrascriverai i ${links.length} link attuali con ${newLinks.length} link caricati. Procedere?`)) {
+          links = newLinks;
+          pinnedLinks = newPinnedLinks;
+          pinnedCategory = newPinnedCategory;
           localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+          if (pinnedCategory) {
+            localStorage.setItem('pinnedCategory', pinnedCategory);
+          } else {
+            localStorage.removeItem('pinnedCategory');
+          }
           saveAndRender();
           showToast('Link importati con successo!');
         }
       } catch (err) {
-        alert('Errore durante l’importazione:\n' + err.message);
+        alert('Errore durante l\'importazione:\n' + err.message);
       }
       importFile.value = '';
     };
     reader.readAsText(file);
   });
 
-  // === Render Links ===
+  function renameCategory(oldName, newName) {
+    newName = newName.trim();
+    if (!newName || newName === oldName) return false;
+
+    const existingCategories = getCategories();
+    if (existingCategories.includes(newName) && newName !== oldName) {
+      alert('Esiste già una categoria con questo nome.');
+      return false;
+    }
+
+    links.forEach(link => {
+      if (link.category === oldName) {
+        link.category = newName;
+      }
+    });
+
+    if (pinnedLinks[oldName]) {
+      pinnedLinks[newName] = pinnedLinks[oldName];
+      delete pinnedLinks[oldName];
+      localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+    }
+
+    if (pinnedCategory === oldName) {
+      pinnedCategory = newName;
+      localStorage.setItem('pinnedCategory', pinnedCategory);
+    }
+
+    saveAndRender();
+    showToast(`Categoria rinominata in "${newName}"`);
+    return true;
+  }
+
+  function deleteCategory(categoryName) {
+    const linksInCategory = links.filter(link => link.category === categoryName);
+    const count = linksInCategory.length;
+    
+    if (count === 0) {
+      showToast('Categoria già vuota');
+      return;
+    }
+
+    const firstConfirm = confirm(
+      `ATTENZIONE!\n\n` +
+      `Stai per cancellare la categoria "${categoryName}" che contiene ${count} link.\n\n` +
+      `Questa azione eliminerà TUTTI i link presenti nella categoria.\n\n` +
+      `Vuoi procedere?`
+    );
+
+    if (!firstConfirm) return;
+
+    const secondConfirm = confirm(
+      `ULTIMA CONFERMA!\n\n` +
+      `Sei davvero sicuro di voler cancellare la categoria "${categoryName}" con tutti i suoi ${count} link?\n\n` +
+      `Questa azione è IRREVERSIBILE!`
+    );
+
+    if (!secondConfirm) return;
+
+    // Rimuovi tutti i link della categoria
+    links = links.filter(link => link.category !== categoryName);
+
+    // Rimuovi eventuali pin della categoria
+    if (pinnedLinks[categoryName]) {
+      delete pinnedLinks[categoryName];
+      localStorage.setItem('pinnedLinks', JSON.stringify(pinnedLinks));
+    }
+
+    if (pinnedCategory === categoryName) {
+      pinnedCategory = null;
+      localStorage.removeItem('pinnedCategory');
+    }
+
+    saveAndRender();
+    showToast(`Categoria "${categoryName}" eliminata con ${count} link`);
+  }
+
   function renderLinks(searchTerm = '') {
     const container = document.getElementById('links-container');
     container.innerHTML = '';
@@ -855,47 +1165,68 @@
       const titleEl = document.createElement('h2');
       titleEl.className = 'section-title';
 
+      // Parte sinistra (pin + nome categoria)
+      const leftDiv = document.createElement('div');
+      leftDiv.className = 'section-title-left';
+
       const showCatPin = !pinnedCategory || pinnedCategory === cat;
       let pinSpan, nameSpan;
 
       if (showCatPin) {
         pinSpan = document.createElement('span');
         pinSpan.textContent = '📌';
-        titleEl.appendChild(pinSpan);
+        leftDiv.appendChild(pinSpan);
       }
 
       nameSpan = document.createElement('span');
       nameSpan.textContent = cat;
-      titleEl.appendChild(nameSpan);
+      leftDiv.appendChild(nameSpan);
 
-      // Bottone modifica
+      titleEl.appendChild(leftDiv);
+
+      // Parte destra (modifica + cancella)
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'section-title-actions';
+
+      // Bottone modifica categoria
       const editBtn = document.createElement('button');
       editBtn.textContent = '✏️';
       editBtn.style.background = 'none';
       editBtn.style.border = 'none';
       editBtn.style.color = 'var(--primary)';
       editBtn.style.cursor = 'pointer';
-      editBtn.style.marginLeft = '0.5rem';
       editBtn.style.fontSize = '0.9rem';
       editBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // ← IMPORTANTE: blocca il click sul titolo
+        e.stopPropagation();
         startRenameCategory(cat, nameSpan);
       });
-      titleEl.appendChild(editBtn);
+      actionsDiv.appendChild(editBtn);
 
-      // Clic sul titolo (escluso il bottone) → pin
+      // Bottone cancella categoria
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '🗑️';
+      deleteBtn.style.background = 'none';
+      deleteBtn.style.border = 'none';
+      deleteBtn.style.color = 'var(--danger)';
+      deleteBtn.style.cursor = 'pointer';
+      deleteBtn.style.fontSize = '0.9rem';
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteCategory(cat);
+      });
+      actionsDiv.appendChild(deleteBtn);
+
+      titleEl.appendChild(actionsDiv);
+
       if (showCatPin) {
-        titleEl.style.cursor = 'pointer';
-        titleEl.addEventListener('click', (e) => {
-          if (e.target !== editBtn) {
-            togglePinCategory(cat);
-          }
+        leftDiv.style.cursor = 'pointer';
+        leftDiv.addEventListener('click', (e) => {
+          togglePinCategory(cat);
         });
       }
 
       section.appendChild(titleEl);
 
-      // Link nella categoria
       let categoryLinks = groups[cat].sort((a, b) => a.title.localeCompare(b.title, 'it', { sensitivity: 'base' }));
       const pinnedId = pinnedLinks[cat];
       if (pinnedId) {
@@ -908,6 +1239,10 @@
       categoryLinks.forEach(item => {
         const itemEl = document.createElement('div');
         itemEl.className = 'link-item';
+
+        // Contenitore per il contenuto (titolo + descrizione)
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'link-content';
 
         const linkId = getLinkId(item);
         const showLinkPin = !pinnedLinks[cat] || pinnedLinks[cat] === linkId;
@@ -934,16 +1269,16 @@
         linkA.addEventListener('mouseout', () => linkA.style.textDecoration = 'none');
         h3.appendChild(linkA);
 
-        itemEl.appendChild(h3);
+        contentDiv.appendChild(h3);
 
         if (item.desc) {
           const descP = document.createElement('p');
           descP.className = 'desc';
           descP.textContent = item.desc;
-          itemEl.appendChild(descP);
+          contentDiv.appendChild(descP);
         }
 
-        // Pulsanti azione
+        // Contenitore per le azioni (modifica + cancella) - sulla destra
         const actionsDiv = document.createElement('div');
         actionsDiv.className = 'link-actions';
 
@@ -961,6 +1296,7 @@
         deleteBtn.addEventListener('click', () => deleteLink(item.originalIndex));
         actionsDiv.appendChild(deleteBtn);
 
+        itemEl.appendChild(contentDiv);
         itemEl.appendChild(actionsDiv);
         section.appendChild(itemEl);
       });
@@ -969,35 +1305,40 @@
     });
   }
 
-  // === Funzione per rinominare categoria ===
   function startRenameCategory(oldName, nameSpan) {
     const input = document.createElement('input');
     input.type = 'text';
     input.className = 'rename-input';
     input.value = oldName;
-    input.select();
+    
+    const originalSpan = nameSpan.cloneNode(true);
 
     const handleRename = () => {
-      const newName = input.value;
-      nameSpan.replaceWith(nameSpan.cloneNode(true)); // ripristina temporaneamente
-      if (renameCategory(oldName, newName)) {
-        // L'aggiornamento avviene in saveAndRender()
+      const newName = input.value.trim();
+      if (newName && newName !== oldName) {
+        renameCategory(oldName, newName);
+      } else {
+        input.replaceWith(originalSpan);
+        renderLinks();
       }
     };
 
     input.addEventListener('blur', handleRename);
     input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleRename();
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleRename();
+      }
       if (e.key === 'Escape') {
-        nameSpan.replaceWith(nameSpan.cloneNode(true));
+        input.replaceWith(originalSpan);
       }
     });
 
     nameSpan.replaceWith(input);
     input.focus();
+    input.select();
   }
 
-  // === Avvia ===
   renderLinks();
 </script>
 </body>
